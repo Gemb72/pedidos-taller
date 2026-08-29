@@ -541,6 +541,29 @@ let syncReady = false;
 let syncTimer = null;
 let applyingRemote = false;
 
+function orderStamp(o){
+  return String((o && (o.modifiedDate || o.receivedDate)) || '');
+}
+function mergeOrders(local, remote){
+  const loc = Array.isArray(local) ? local : [];
+  const rem = Array.isArray(remote) ? remote : [];
+  const map = {};
+  rem.forEach(o => { if(o && o.id) map[o.id] = o; });
+  const remIds = new Set(Object.keys(map));
+  loc.forEach(o => {
+    if(!o || !o.id) return;
+    if(!map[o.id]){
+      const t = Date.parse(String(o.receivedDate||'').replace(' ','T')) || 0;
+      if(Date.now() - t < 3*60*1000) map[o.id] = o; // pedido local de hace <3 min (carrera)
+      return;
+    }
+    if(orderStamp(o) >= orderStamp(map[o.id])) map[o.id] = o;
+  });
+  // si el local acaba de borrar/archivar, no resucitar remotos viejos:
+  // se respeta remote como base; solo se agregan locales recientes sin id remoto
+  return Object.values(map);
+}
+
 function saveState(){
   localStorage.setItem('orders',JSON.stringify(state.orders));
   localStorage.setItem('inventory',JSON.stringify(state.inventory));
@@ -553,9 +576,16 @@ function saveState(){
 async function pushOrdersToCloud(){
   if(!sb || !syncReady) return;
   try{
+    const { data } = await sb.from('registros_pedidos').select('orders').eq('id', 1).maybeSingle();
+    const remote = (data && Array.isArray(data.orders)) ? data.orders : [];
+    const merged = mergeOrders(state.orders, remote);
+    applyingRemote = true;
+    state.orders = merged;
+    localStorage.setItem('orders', JSON.stringify(state.orders));
+    applyingRemote = false;
     const { error } = await sb.from('registros_pedidos').upsert({
       id: 1,
-      orders: state.orders,
+      orders: merged,
       updated_at: new Date().toISOString()
     });
     if(error) console.warn('Sync push:', error.message);
@@ -569,7 +599,7 @@ async function pullOrdersFromCloud(){
     if(error){ console.warn('Sync pull:', error.message); return; }
     if(data && Array.isArray(data.orders)){
       applyingRemote = true;
-      state.orders = data.orders;
+      state.orders = mergeOrders(state.orders, data.orders);
       localStorage.setItem('orders', JSON.stringify(state.orders));
       applyingRemote = false;
     }
@@ -2386,7 +2416,7 @@ function submitRestOrder(){
   }
 
   const newOrder={
-    id:'PED-'+Math.random().toString(36).substr(2,8).toUpperCase(),
+    id:'PED-'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).substr(2,4).toUpperCase(),
     rest:state.selRest,deliveryDate:state.deliveryDate,
     planta: state.selRest==='METROPOLIS' ? (state.metropolisPlanta||'') : '',
     receivedDate:received,
@@ -2750,9 +2780,12 @@ function renderAPPCC(){
     });
   });
   rows.sort((a,b)=>{
-    const da=a.received||a.para||'';
-    const db=b.received||b.para||'';
-    if(db!==da) return db.localeCompare(da);
+    const expA=a.para||a.received||'';
+    const expB=b.para||b.received||'';
+    if(expB!==expA) return expB.localeCompare(expA);
+    const ra=a.received||'';
+    const rb=b.received||'';
+    if(rb!==ra) return rb.localeCompare(ra);
     return (b.id||'').localeCompare(a.id||'');
   });
 
