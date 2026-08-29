@@ -156,7 +156,8 @@ h2{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.3rem;font-weight:6
 .btn-dividir:hover{background:#f0d6db}
 
 
-.table-module{width:100%;border-collapse:collapse;margin-bottom:0.5rem}
+.table-module{width:100%;border-collapse:collapse;margin-bottom:0.5rem;table-layout:fixed}
+.table-module th.qty-col,.table-module td.qty-col{width:4.6rem;text-align:center}
 .table-module th{text-align:left;font-size:0.65rem;color:var(--text-muted);font-weight:700;padding:0.2rem 0.3rem;background:#f8fafc;border:1px solid var(--border);text-transform:uppercase}
 .table-module td{padding:0.25rem 0.3rem;font-size:0.78rem;vertical-align:middle;border:1px solid var(--border)}
 .table-module .prod-name{font-size:0.78rem;line-height:1.2}
@@ -245,7 +246,9 @@ input:focus,select:focus{outline:none;border-color:var(--text)}
 .qty-controls{display:flex;align-items:center;gap:0.3rem}
 .qty-controls button{width:22px;height:22px;border-radius:var(--radius);border:1px solid var(--text);background:transparent;cursor:pointer;font-weight:500;font-size:0.75rem;display:flex;align-items:center;justify-content:center;color:var(--text)}
 .qty-controls button:hover{background:var(--text);color:#fff}
-.qty-controls input{width:30px;text-align:center;padding:0;border:1px solid var(--border);border-radius:var(--radius);font-weight:500;font-size:0.75rem;height:22px;background:#fff}
+.qty-controls input{width:42px;min-width:42px;text-align:center;padding:0 2px;border:1px solid var(--border);border-radius:var(--radius);font-weight:500;font-size:0.75rem;height:22px;background:#fff;-moz-appearance:textfield}
+.qty-controls input::-webkit-outer-spin-button,
+.qty-controls input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .cart-item-row{display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0;border-bottom:1px solid rgba(20,20,20,0.06)}
 .cart-item-info{display:flex;flex-direction:column;gap:0.12rem}
 .cart-item-name{font-size:0.82rem;font-weight:500;color:var(--text)}
@@ -313,9 +316,11 @@ input:focus,select:focus{outline:none;border-color:var(--text)}
   font-size:0.45rem!important;
 }
 .qty-controls input{
-  width:24px!important;
-  height:20px!important;
-  font-size:0.72rem!important;
+  width:42px!important;
+  min-width:42px!important;
+  height:22px!important;
+  font-size:0.75rem!important;
+  padding:0 2px!important;
 }
 .qty-controls button{
   width:20px!important;
@@ -373,9 +378,9 @@ input:focus,select:focus{outline:none;border-color:var(--text)}
   .tabs-sub button{padding:0.28rem 0.45rem;min-height:0;font-size:0.68rem}
 
   .catalog-item{padding:0.28rem 0}
-  .qty-controls{gap:0.15rem}
-  .qty-controls button{width:20px;height:20px;font-size:0.65rem}
-  .qty-controls input{width:24px;height:20px;font-size:0.68rem;padding:0;min-height:0}
+  .qty-controls{gap:0.2rem}
+  .qty-controls button{width:22px;height:22px;font-size:0.7rem}
+  .qty-controls input{width:42px;min-width:42px;height:22px;font-size:0.75rem;padding:0 2px;min-height:0}
 
   .dispatch-qty-container{width:28px}
   .dispatch-qty-container button{width:26px;height:14px;font-size:0.48rem}
@@ -446,18 +451,18 @@ input:focus,select:focus{outline:none;border-color:var(--text)}
 <div class="container" id="app"></div>
 <script>
 const RESTAURANTS_CONFIG={
-  AARDE:{code:"1111",catalog:{"COCINA": ["Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Chimichurri", "Gazpacho de sandia", "Masa de yuca (C)", "Patata pelada AARDE", "Remolacha blanca cocida", "Remolacha morada cocida", "Remolacha naranja cocida", "Remolacha rosada cocida", "Salsa curry AARDE (C)", "Vichyssoise AARDE", "Vinagreta de frambuesa (C)"], "PANADERIA": ["Masa de nam Injera", "Masa de pizza", "Tortita de aceite (precocido)"], "HELADOS+": ["Helado de avellana (Pozzetti)", "Helado de coco (Pozzetti)", "Helado de pistacho (Pozzetti)", "Helado de vainilla (Pozzetti)", "Sorbete de gorila (Pozzetti)", "Sorbete de mango (Pozzetti)", "Sorbete de maracuya (Pozzetti)"]}},
-  AMAZONICO:{code:"2222",catalog:{"COCINA": ["Aceite de cayena", "Aceite de mostaza", "Aji amarillo AMAZONICO (C)", "Bandeja de rollito (PATO)", "Berenjena asada", "Caldo de mariscos (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Chimichurri", "Cochinita (C)", "Crema de maiz", "Emulsion de aceituna verde (C)", "Fideos de calamar AMAZONICO (C)", "Fumet de pescado (C)", "Gazpacho de acai", "Gazpacho de sandia", "Gazpacho de tomate, jalapeño y hierbas", "Humus", "Muslo de pato", "Paletilla cordero c/huacatay AMAZONICO", "Patata baby confitada AMAZONICO", "Patata baston AMAZONICO", "Pechuga de pato", "Pure de patata AMAZONICO", "Salmorreta AMAZONICO (C)", "Salsa agridulce de pimiento & piña", "Salsa anticuchera AMAZONICO (C)", "Salsa curry AMAZONICO", "Salsa de cochinita (C)", "Sonso de yuca AMAZONICO (C)", "Tortita de arroz y camaron", "Verdura wok"], "PANADERIA": ["Masa de pan nam"], "HELADOS+": ["Helado de chocolate trufado (Tupper)", "Helado de coco (Pozzetti)", "Helado de platano (Pozzetti)", "Helado de vainilla (Pozzetti)", "Helado de yogurt griego (Pozzetti)", "Sorbete de acai (Pozzetti)", "Sorbete de aguacate (Pozzetti)", "Sorbete de limon (Pozzetti)", "Sorbete de mango (Pozzetti)", "Sorbete de maracuya (Pozzetti)"], "OTROS": ["Piña torneada", "Queso en polvo (bolsa)"]}},
-  NUMA:{code:"3333",catalog:{"COCINA": ["Caldo de mariscos (C)", "Salsa bogavante (C)", "Salsa de rabo px NUMA (C)"], "HELADOS+": ["Helado de avellana (Pozzetti)", "Helado de gianduja (Pozzetti)", "Helado de mascarpone con higos (Tupper)", "Helado de pistacho (Pozzetti)", "Helado de turron (Tupper)", "Helado de vainilla (Pozzetti)", "Helado de yogurt griego (Pozzetti)", "Sorbete de cereza (Pozzetti)", "Sorbete de limon (Tupper)", "Sorbete de mandarina (Pozzetti)", "Sorbete de mango (Pozzetti)"], "ALCACHOFAS": ["Flor de alcachofa (caja)", "Fondo de alcachofa (caja)"]}},
-  PARAGUAS:{code:"4444",catalog:{"COCINA": ["Aceite de mostaza", "Aceite de periquito (C)", "Cachopo PARAGUAS", "Caldo de manitas PARAGUAS (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Cochinillo", "Cremoso foie-gras", "Croquetas fabada", "Croquetas oricio", "Huevo Poche (30u)", "Jarrete lacado PARAGUAS", "Jugo de ternera (C)", "Manitas (C)", "Masa rabo de toro PARAGUAS (C)", "Paletilla cordero lechal lacada PARAGUAS", "Salsa bogavante (C)", "Salsa de manitas (C)", "Salsa de rabo px (C)", "Salsa verde", "Vinagreta de frambuesa (C)", "Vinagreta de tomate (C)", "Yema cocida"], "CARNES": ["Chorizo (tira)", "Lomo Alto", "Morcilla (tira)", "Panceta", "Pitu", "Solomillo +3"], "VERDURAS+": ["Cebolla pelada (bolsa)", "Patata (Saco)", "Patata pelada (bolsa)", "Pimiento rojo (unidades)", "Pimiento verde (unidades)", "Puerros (piezas)"], "HELADOS+": ["Helado de caramelo (Tupper)", "Helado de chocolate amargo (Tupper)", "Helado de chocolate blanco straciatella (Tupper)", "Helado de pistacho (Tupper)", "Helado de turron (Tupper)", "Helado de vainilla (Tupper)", "Helado de yogurt griego (Tupper)", "Sorbete de limon (Tupper)", "Sorbete de mandarina (Tupper)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Tupper)"], "ALCACHOFAS": ["Fondo de alcachofa (bandejas)"], "BEBIDAS": ["Bandeira (botella)", "Brandy Sorel (botella)", "Brio (botella)", "Coca cola normal (paquete)", "Coca Cola zero (paquete)", "Pedro Ximenez", "Sidra Zapiain (botella)", "Vodka (botella)"], "OTROS": ["Bacalao (bandeja)", "Barra de Queso", "Bonito/atun (lata)", "Caja de oricio", "Esparragos (caja)", "Fabes (kg)", "Hojaldre", "Leche (caja)", "Piparras (caja)", "Tomate pelado entero (lata)", "Verdinas (kg)"]}},
-  QUINTIN:{code:"5555",catalog:{"COCINA": ["Cachopo QUINTIN", "Ensaladilla", "Escalopines", "Huevo Poche (60u)", "Masa rabo de toro QUINTIN (C)", "Patata baston QUINTIN", "Patata pelada QUINTIN", "Salsa bogavante (C)", "Salsa de rabo px (C)", "Vinagreta de tomate (C)"], "CARNES": ["Babilla", "Pitu", "Solomillo", "Solomillo (steak)", "Solomillo entero"], "PANADERIA": ["Masa de pizza"], "HELADOS+": ["Helado de avellana (Tupper)", "Helado de chocolate blanco straciatella (Tupper)", "Helado de chocolate oreo (Tupper)", "Helado de chocolate trufado (Tupper)", "Helado de mascarpone con higos (Tupper)", "Helado de pistacho (Tupper)", "Helado de turron (Tupper)", "Helado de vainilla (Tupper)", "Helado de vainilla con nueces (Tupper)", "Helado de yogurt griego (Tupper)", "Sorbete de limon (Tupper)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Tupper)"], "OTROS": ["Fabes (bolsa)", "Huevas de trucha", "Leche (caja)", "Nata (caja)", "Pasta de rollito primavera", "Pasta Ravioli (wan tun)"], "ALCACHOFAS": ["Flor de alcachofa (caja)", "Fondo de alcachofa (caja)"]}},
-  TENCONTEN:{code:"6666",catalog:{"COCINA": ["Aceite de periquito (C)", "Caldo de mariscos (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Chimichurri", "Emulsion de aceituna verde (C)", "Hamburguesa de rabo de toro tenconten", "Jugo de ternera (C)", "Salsa de rabo px (C)", "Vinagreta de tomate (C)"], "HELADOS+": ["Helado de avellana (Tupper)", "Helado de chocolate blanco straciatella (Tupper)", "Helado de chocolate con leche (Tupper)", "Helado de coco (Tupper)", "Helado de menta (Tupper)", "Helado de vainilla (Tupper)", "Helado de yogurt griego (Tupper)", "Sorbete de limon (Tupper)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Tupper)"]}},
-  AUREA:{code:"7777",catalog:{"COCINA": ["Caldo de mariscos (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Chimichurri", "Emulsion de aceituna verde (C)", "Ensaladilla", "Hamburguesa de rabo de toro AUREA", "Jugo de ternera (C)", "Salsa bogavante (C)", "Salsa de rabo px (C)", "Vinagreta de tomate (C)"], "HELADOS+": ["Helado de chocolate con leche (Pozzetti)", "Helado de gianduja (Pozzetti)", "Helado de jengibre (Pozzetti)", "Helado de mascarpone con higos (Tupper)", "Helado de turron (Tupper)", "Helado de vainilla (Pozzetti)", "Helado de vainilla (Tupper)", "Helado de yogurt griego (Pozzetti)", "Helado de yogurt griego (Tupper)", "Sorbete de frambuesa (Pozzetti)", "Sorbete de limon (Tupper)", "Sorbete de mandarina (Pozzetti)", "Sorbete de mandarina (Tupper)", "Sorbete de mango (Pozzetti)"], "ALCACHOFAS": ["Flor de alcachofa (caja)", "Fondo de alcachofa (caja)"]}},
-  LIBRARY:{code:"8888",catalog:{"COCINA": ["Aceite de pimenton LIBRARY", "Ajo blanco de esparragos (C)", "Beurre blanc hinojo (C)", "Bogavante duo Pack", "Caldo de mariscos (C)", "Cebolla pochada (C)", "Cebollitas glaseadas LIBRARY", "Chimichurri", "Corvina (C)", "Coulis de frutos rojos LIBRARY (C)", "Crema de calabaza LIBRARY", "Crema de chirivia (C)", "Crema tupinambo LIBRARY (C)", "Croquetas de carabinero", "Croquetas de cecina LIBRARY", "Emulsion de aceituna verde (C)", "Ensaladilla", "Escabeche boletus", "Esparrago cocido LIBRARY", "Farsa de bogavante y centolla LIBRARY (C)", "Farsa de cebolla a la crema (C)", "Gamba roja (C)", "Gazpacho de sandia LIBRARY", "Gazpacho de tomate raff LIBRARY", "Hamburguesa de rabo de toro 100g. LIBRARY", "Hamburguesa de rabo de toro 50g. LIBRARY", "Jarrete lacado LIBRARY", "Jugo de ternera (C)", "Leche de tigre frutos rojos (C)", "Lubina (C)", "Masa de yuca (C)", "Merluza (C)", "Paletilla cordero lechal lacada LIBRARY", "Pechuga para cesar LIBRARY (C)", "Pisto LIBRARY", "Polvo de ajo", "Poularda achiote LIBRARY (C)", "Pure de patata LIBRARY", "Roast beef LIBRARY", "Salpicon de mariscos LIBRARY", "Salsa agridulce LIBRARY", "Salsa brava (C)", "Salsa de erizo (C)", "Salsa de rabo px (C)", "Salsa marinera LIBRARY (C)", "Salsa suquet LIBRARY (C)", "Salsa verde c/chirlas (C)", "Setas silvestres guisadas LIBRARY (C)"], "HELADOS+": ["Helado de coco (Tupper)", "Helado de te (Tupper)", "Helado de vainilla (Pozzetti)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Tupper)"], "POSTRES": ["Cookies", "Sable cacao", "Sable centeno", "Sopa de chocolate", "Tarta de queso", "Teja Pecana", "Trufas", "Tuille Brownies", "Tuille Profiterol"]}},
-  METROPOLIS:{code:"9999",catalog:{"COCINA": ["Aceite de periquito (C)", "Caldo de manitas METROPOLIS (C)", "Caldo de mariscos METROPOLIS (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada METROPOLIS (C)", "Chimichurri", "Emulsion de aceituna verde (C)", "Ensaladilla METROPOLIS", "Farsa de bogavante y centolla METROPOLIS (C)", "Farsa de cebolla a la crema (C)", "Gazpacho de sandia", "Gazpacho de tomate, jalapeño y hierbas", "Jugo de ternera METROPOLIS (C)", "Manitas METROPOLIS (C)", "Masa de yuca (C)", "Pechuga para cesar METROPOLIS (C)", "Salsa de manitas METROPOLIS (C)", "Salsa de rabo px (C)", "Salsa suquet METROPOLIS (C)", "Verdura p/ lasana METROPOLIS", "Yema cocida"], "HELADOS+": ["Helado de avellana (Pozzetti)", "Helado de cafe (Pozzetti)", "Helado de chocolate con leche (Tupper)", "Helado de coco (Tupper)", "Helado de dulce de leche (Tupper)", "Helado de jengibre (Pozzetti)", "Helado de mascarpone (Pozzetti)", "Helado de pistacho (Tupper)", "Helado de vainilla (Pozzetti)", "Helado de vainilla (Tupper)", "Helado de yogurt griego (Pozzetti)", "Helado de yogurt griego (Tupper)", "Sorbete de frambuesa (Pozzetti)", "Sorbete de frambuesa (Tupper)", "Sorbete de gorila (Tupper)", "Sorbete de limon (Tupper)", "Sorbete de mango (Pozzetti)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Pozzetti)"], "OTROS": ["Huevas de Erizo (caja)"]}}
+  AARDE:{code:"1111",catalog:{"COCINA": ["Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Chimichurri (tupper 3 litros)", "Gazpacho de sandia", "Masa de yuca (C)", "Patata pelada AARDE", "Remolacha blanca cocida", "Remolacha morada cocida", "Remolacha naranja cocida", "Remolacha rosada cocida", "Salsa curry AARDE (C)", "Vichyssoise AARDE", "Vinagreta de frambuesa (C)"], "PANADERIA": ["Masa de nam Injera", "Masa de pizza", "Tortita de aceite (precocido)"], "HELADOS+": ["Helado de avellana (Pozzetti)", "Helado de coco (Pozzetti)", "Helado de pistacho (Pozzetti)", "Helado de vainilla (Pozzetti)", "Sorbete de gorila (Pozzetti)", "Sorbete de mango (Pozzetti)", "Sorbete de maracuya (Pozzetti)"]}},
+  AMAZONICO:{code:"2222",catalog:{"COCINA": ["Aceite de cayena", "Aceite de mostaza", "Aji amarillo AMAZONICO (C)", "Bandeja de rollito (PATO)", "Berenjena asada", "Calamar (C)", "Caldo de mariscos (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Chimichurri (tupper 3 litros)", "Cochinita (C)", "Crema de maiz", "Emulsion de aceituna verde (C)", "Fideos de calamar AMAZONICO (C)", "Fumet de pescado (C)", "Gazpacho de acai", "Gazpacho de sandia", "Gazpacho de tomate, jalapeño y hierbas", "Humus", "Paletilla cordero c/huacatay AMAZONICO", "Patata baby confitada AMAZONICO", "Patata baston AMAZONICO", "Pato (Muslo)", "Pato (Pechuga)", "Pure de patata AMAZONICO", "Salmorreta AMAZONICO (C)", "Salsa agridulce de pimiento & pina", "Salsa anticuchera AMAZONICO (C)", "Salsa curry AMAZONICO", "Salsa de cochinita (C)", "Sonso de yuca AMAZONICO (C)", "Tortita de arroz y camaron", "Verdura wok"], "PANADERIA": ["Masa de pan nam", "Pan brioche curry y Cebolla", "Pan de olivas aromatico", "Pan hidratado con cereal integral", "Pan the only gluten free"], "HELADOS+": ["Helado de chocolate trufado (Tupper)", "Helado de coco (Pozzetti)", "Helado de platano (Pozzetti)", "Helado de vainilla (Pozzetti)", "Helado de yogurt griego (Pozzetti)", "Sorbete de acai (Pozzetti)", "Sorbete de aguacate (Pozzetti)", "Sorbete de limon (Pozzetti)", "Sorbete de mango (Pozzetti)", "Sorbete de maracuya (Pozzetti)"], "OTROS": ["Pina Natural (unidad)", "Pina torneada (bandeja)", "Queso en polvo (bolsa)"]}},
+  NUMA:{code:"3333",catalog:{"COCINA": ["Caldo de mariscos (C)", "Salsa bogavante (C)", "Salsa de rabo px NUMA (C)"], "HELADOS+": ["Helado de avellana (Pozzetti)", "Helado de gianduja (Pozzetti)", "Helado de mascarpone con higos (Tupper)", "Helado de pistacho (Pozzetti)", "Helado de turron (Tupper)", "Helado de vainilla (Pozzetti)", "Helado de yogurt griego (Pozzetti)", "Sorbete de cereza (Pozzetti)", "Sorbete de limon (Tupper)", "Sorbete de mandarina (Pozzetti)", "Sorbete de mango (Pozzetti)"], "ALCACHOFAS": ["Flor de alcachofa (caja)", "Fondo de alcachofa (caja)"], "PANADERIA": ["Chapatita Blanca (Precocido)", "Chapatita de aceituna (Precocido)", "Flauta (Precocido)", "Tomate seco con albahaca (Precocido)"]}},
+  PARAGUAS:{code:"4444",catalog:{"COCINA": ["Aceite de mostaza", "Aceite de periquito (C)", "Cachopo PARAGUAS", "Caldo de manitas PARAGUAS (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Cochinillo", "Cremoso foie-gras", "Croquetas fabada", "Croquetas oricio", "Huevo Poche (30u)", "Jarrete lacado PARAGUAS", "Jugo de ternera (C)", "Manitas (C)", "Masa rabo de toro PARAGUAS (C)", "Paletilla cordero lechal lacada PARAGUAS", "Salsa bogavante (C)", "Salsa de manitas (C)", "Salsa de rabo px (C)", "Salsa verde", "Vinagreta de frambuesa (C)", "Vinagreta de tomate (C)", "Yema cocida"], "CARNES": ["Chorizo (tira)", "Lomo Alto", "Morcilla (tira)", "Panceta", "Pitu", "Solomillo +3"], "VERDURAS+": ["Cebolla pelada (bolsa)", "Patata (saco)", "Patata pelada (bolsa)", "Pimiento rojo (unidades)", "Pimiento verde (unidades)", "Puerros (piezas)"], "HELADOS+": ["Helado de caramelo (Tupper)", "Helado de chocolate amargo (Tupper)", "Helado de chocolate blanco straciatella (Tupper)", "Helado de pistacho (Tupper)", "Helado de turron (Tupper)", "Helado de vainilla (Tupper)", "Helado de yogurt griego (Tupper)", "Sorbete de limon (Tupper)", "Sorbete de mandarina (Tupper)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Tupper)"], "ALCACHOFAS": ["Fondo de alcachofa (bandejas)"], "BEBIDAS": ["Bandeira (botella)", "Brandy Sorel (botella)", "Brio (botella)", "Coca cola normal (paquete)", "Coca Cola zero (paquete)", "Disaronno (botella)", "Pedro Ximenez (botella)", "Sidra Zapiain (botella)", "Vodka (botella)"], "OTROS": ["Bacalao (bandeja)", "Barra de Queso", "Bonito/atun (lata)", "Caviar de Erizo (caja)", "Esparragos (caja)", "Fabes (kg)", "Hojaldre (caja)", "Leche (caja)", "Piparras (caja)", "Tomate pelado entero (lata)", "Verdinas (kg)"]}},
+  QUINTIN:{code:"5555",catalog:{"COCINA": ["Cachopo QUINTIN", "Ensaladilla", "Escalopines", "Huevo Poche (60u)", "Masa rabo de toro QUINTIN (C)", "Patata baston QUINTIN", "Patata pelada QUINTIN", "Salsa bogavante (C)", "Salsa de rabo px (C)", "Vinagreta de tomate (C)"], "CARNES": ["Babilla", "Pitu", "Secreto", "Solomillo", "Solomillo (steak)", "Solomillo entero"], "PANADERIA": ["Masa de pizza"], "HELADOS+": ["Helado de avellana (Tupper)", "Helado de chocolate blanco straciatella (Tupper)", "Helado de chocolate oreo (Tupper)", "Helado de chocolate trufado (Tupper)", "Helado de mascarpone con higos (Tupper)", "Helado de pistacho (Tupper)", "Helado de turron (Tupper)", "Helado de vainilla (Tupper)", "Helado de vainilla con nueces (Tupper)", "Helado de yogurt griego (Tupper)", "Sorbete de limon (Tupper)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Tupper)"], "OTROS": ["Fabes (bolsa)", "Huevas de trucha", "Leche (caja)", "Nata (caja)", "Pasta de rollito primavera", "Pasta Ravioli (wan tun)"], "ALCACHOFAS": ["Flor de alcachofa (caja)", "Fondo de alcachofa (caja)"]}},
+  TENCONTEN:{code:"6666",catalog:{"COCINA": ["Aceite de periquito (C)", "Caldo de mariscos (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Chimichurri (tupper 3 litros)", "Emulsion de aceituna verde (C)", "Hamburguesa de rabo de toro tenconten", "Jugo de ternera (C)", "Salsa de rabo px (C)", "Vinagreta de tomate (C)"], "HELADOS+": ["Helado de avellana (Tupper)", "Helado de chocolate blanco straciatella (Tupper)", "Helado de chocolate con leche (Tupper)", "Helado de coco (Tupper)", "Helado de menta (Tupper)", "Helado de vainilla (Tupper)", "Helado de yogurt griego (Tupper)", "Sorbete de limon (Tupper)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Tupper)"], "PANADERIA": ["Pan de Maiz (Precocido)", "Panecillo de Viena (Precocido)", "Tortita de aceite (precocido)"]}},
+  AUREA:{code:"7777",catalog:{"COCINA": ["Caldo de mariscos (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada (C)", "Chimichurri (tupper 3 litros)", "Emulsion de aceituna verde (C)", "Ensaladilla", "Hamburguesa de rabo de toro AUREA", "Jugo de ternera (C)", "Salsa bogavante (C)", "Salsa de rabo px (C)", "Vinagreta de tomate (C)"], "HELADOS+": ["Helado de chocolate con leche (Pozzetti)", "Helado de gianduja (Pozzetti)", "Helado de jengibre (Pozzetti)", "Helado de mascarpone con higos (Tupper)", "Helado de turron (Tupper)", "Helado de vainilla (Pozzetti)", "Helado de vainilla (Tupper)", "Helado de yogurt griego (Pozzetti)", "Helado de yogurt griego (Tupper)", "Sorbete de frambuesa (Pozzetti)", "Sorbete de limon (Tupper)", "Sorbete de mandarina (Pozzetti)", "Sorbete de mandarina (Tupper)", "Sorbete de mango (Pozzetti)"], "ALCACHOFAS": ["Flor de alcachofa (caja)", "Fondo de alcachofa (caja)"], "PANADERIA": ["Baguettin (Precocido)", "Chapatita Integral con semilla (Precocido)", "Chusco (Horneado)", "Chusco (Precocido)", "Francesilla Madrilena (Precocido)", "Pan de semilla (Precocido)"]}},
+  LIBRARY:{code:"8888",catalog:{"COCINA": ["Aceite de pimenton LIBRARY", "Ajo blanco de esparragos (C)", "Beurre blanc hinojo (C)", "Bogavante duo Pack", "Caldo de mariscos (C)", "Cebolla pochada (C)", "Cebollitas glaseadas LIBRARY", "Chimichurri (tupper 3 litros)", "Corvina (C)", "Coulis de frutos rojos LIBRARY (C)", "Crema de calabaza LIBRARY", "Crema de chirivia (C)", "Crema tupinambo LIBRARY (C)", "Croquetas de carabinero", "Croquetas de cecina LIBRARY", "Emulsion de aceituna verde (C)", "Ensaladilla", "Escabeche boletus", "Esparrago cocido LIBRARY", "Farsa de bogavante y centolla LIBRARY (C)", "Farsa de cebolla a la crema (C)", "Gamba roja (C)", "Gazpacho de sandia LIBRARY", "Gazpacho de tomate raff LIBRARY", "Hamburguesa de rabo de toro 100g. LIBRARY", "Hamburguesa de rabo de toro 50g. LIBRARY", "Jarrete lacado LIBRARY", "Jugo de ternera (C)", "Leche de tigre frutos rojos (C)", "Lubina (C)", "Masa de yuca (C)", "Merluza (C)", "Paletilla cordero lechal lacada LIBRARY", "Pechuga para cesar LIBRARY (C)", "Pisto LIBRARY", "Polvo de ajo", "Poularda achiote LIBRARY (C)", "Pure de patata LIBRARY", "Roast beef LIBRARY", "Salpicon de mariscos LIBRARY", "Salsa agridulce LIBRARY", "Salsa brava (C)", "Salsa de erizo (C)", "Salsa de rabo px (C)", "Salsa marinera LIBRARY (C)", "Salsa suquet LIBRARY (C)", "Salsa verde c/chirlas (C)", "Setas silvestres guisadas LIBRARY (C)"], "HELADOS+": ["Helado de coco (Tupper)", "Helado de te (Tupper)", "Helado de vainilla (Pozzetti)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Tupper)"], "PANADERIA": ["Pan de semilla (Precocido)", "Pan Payes (Precocido)", "Pan the only gluten free", "Torta de aceite"], "POSTRES": ["Brownies", "Cookies", "Craquelines", "Profiteroles", "Sable cacao", "Sable centeno", "Sopa de chocolate", "Tarta de queso", "Trufas"], "OTROS": ["Lasana congelada (Packs)"]}},
+  METROPOLIS:{code:"9999",catalog:{"COCINA": ["Aceite de periquito (C)", "Caldo de manitas METROPOLIS (C)", "Caldo de mariscos METROPOLIS (C)", "Caldo de pollo / gallina (C)", "Cebolla pochada METROPOLIS (C)", "Chimichurri (tupper 3 litros)", "Emulsion de aceituna verde (C)", "Ensaladilla METROPOLIS", "Farsa de bogavante y centolla METROPOLIS (C)", "Farsa de cebolla a la crema (C)", "Gazpacho de sandia", "Gazpacho de tomate, jalapeño y hierbas", "Jugo de ternera METROPOLIS (C)", "Manitas METROPOLIS (C)", "Masa de yuca (C)", "Pechuga para cesar METROPOLIS (C)", "Salsa de manitas METROPOLIS (C)", "Salsa de rabo px (C)", "Salsa suquet METROPOLIS (C)", "Verdura p/ lasana METROPOLIS", "Yema cocida"], "HELADOS+": ["Helado de avellana (Pozzetti)", "Helado de cafe (Pozzetti)", "Helado de chocolate con leche (Tupper)", "Helado de coco (Tupper)", "Helado de dulce de leche (Tupper)", "Helado de jengibre (Pozzetti)", "Helado de mascarpone (Pozzetti)", "Helado de pistacho (Tupper)", "Helado de vainilla (Pozzetti)", "Helado de vainilla (Tupper)", "Helado de yogurt griego (Pozzetti)", "Helado de yogurt griego (Tupper)", "Sorbete de frambuesa (Pozzetti)", "Sorbete de frambuesa (Tupper)", "Sorbete de gorila (Tupper)", "Sorbete de limon (Tupper)", "Sorbete de mango (Pozzetti)", "Sorbete de mango (Tupper)", "Sorbete de maracuya (Pozzetti)"], "OTROS": ["Caviar de Erizo (caja)"]}}
 };
 
-const HELADERIA_EXCLUDED=['QUINTIN','TENCONTEN','AUREA','PARAGUAS'];
+const HELADERIA_EXCLUDED=['QUINTIN','TENCONTEN','PARAGUAS'];
 const MODULE_PINS={
   TRANSPORTE:'CENTRAL',
   HELADERIA:'CENTRAL',
@@ -496,6 +501,11 @@ let state={
   heladeriaHistFrom:'',
   heladeriaHistTo:'',
   heladeriaProdSearch:'',
+  panaderiaFilter:'',
+  panaderiaSubTab:'PENDIENTES',
+  panaderiaHistFrom:'',
+  panaderiaHistTo:'',
+  panaderiaProdSearch:'',
   dlRest:'',
   dlFrom:'',
   dlTo:'',
@@ -670,8 +680,15 @@ function skipAPPCC(item){
   return false;
 }
 function isAutoLote(item){
-  const n=(item.name||item||'').toLowerCase();
-  return n.includes('(pozzetti)') || n.includes('bandeja de rollito');
+  const n=(item.name||item||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  // Lote = fecha de entrega (como pozzetti): pozzetti, rollito, té y dulce de leche (tupper heladería)
+  return n.includes('(pozzetti)') || n.includes('bandeja de rollito')
+    || n.includes('helado de te') || n.includes('helado de dulce de leche');
+}
+// Aviso en transporte: se retira / pide en heladería (no Amazónico: esos no se ven en transporte)
+function isRetiroHeladeria(item){
+  const o = (item && typeof item === 'object') ? item : {name: item};
+  return isPozzetti(o) || isHeladeriaMadeTupper(o);
 }
 function isAmazonicoHelado(rest, item){return rest === 'AMAZONICO' && item.area === 'HELADOS';}
 function isHeladeriaRest(rest){ return !HELADERIA_EXCLUDED.includes(rest); }
@@ -688,6 +705,17 @@ function isHeladeriaPendingOrder(o){
   if(!o || o.status === 'Anulado') return false;
   if(o.status !== 'Pendiente' && o.status !== 'Despachado') return false;
   return (o.items||[]).some(it => isHeladeriaRelevant(o.rest, it));
+}
+function isPanaderiaItem(item){
+  return (item && item.area === 'PANADERIA');
+}
+function isPanaderiaRelevant(item){
+  return isPanaderiaItem(item) && !item.panaderiaListo;
+}
+function isPanaderiaPendingOrder(o){
+  if(!o || o.status === 'Anulado') return false;
+  if(o.status !== 'Pendiente' && o.status !== 'Despachado') return false;
+  return (o.items||[]).some(it => isPanaderiaRelevant(it));
 }
 function itemMatchesProduct(item, q){
   const s = (q||'').trim().toLowerCase();
@@ -801,9 +829,11 @@ function navigateTo(v){
   }
   if(v === 'HELADERIA') {
     state.heladeriaSubTab = 'PENDIENTES';
-    const helRests = rests.filter(isHeladeriaRest);
-    const firstWithPoz = helRests.find(r => state.orders.some(o => o.rest === r && isHeladeriaPendingOrder(o)));
-    state.heladeriaFilter = firstWithPoz || helRests[0];
+    state.heladeriaFilter = '';
+  }
+  if(v === 'PANADERIA') {
+    state.panaderiaSubTab = 'PENDIENTES';
+    state.panaderiaFilter = '';
   }
 
   render();
@@ -813,7 +843,8 @@ function getPendingCounts(){
   const pend=state.orders.filter(o=>o.status==='Pendiente');
   const transporte = pend.filter(o => o.items.some(it => isVisibleInTransport(o.rest, it))).length;
   const hel = state.orders.filter(o => isHeladeriaPendingOrder(o)).length;
-  return{transporte, heladeria:hel};
+  const pan = state.orders.filter(o => isPanaderiaPendingOrder(o)).length;
+  return{transporte, heladeria:hel, panaderia:pan};
 }
 
 const app=document.getElementById('app');
@@ -881,23 +912,164 @@ function renderHome(){
     </div>
     <div class="card-puesto" onclick="navigateTo('PANADERIA')">
       <div class="card-puesto-left"><div class="card-puesto-icon">🥖</div><div class="card-puesto-info"><h3>PANADERÍA</h3></div></div>
+      <span class="badge-count ${c.panaderia>0?'active':''}">${c.panaderia} Ped.</span>
     </div>
   </div>`;
 }
 
-// ── PANADERÍA (módulo preparado; lógica cuando definamos el flujo) ──
+function markPanaderiaDone(orderId){
+  const order = state.orders.find(o => o.id === orderId);
+  if(!order || (order.status !== 'Pendiente' && order.status !== 'Despachado')) return;
+  const relevant = (order.items||[]).filter(it => isPanaderiaRelevant(it));
+  if(!relevant.length) return;
+  relevant.forEach(it => { it.panaderiaListo = true; });
+  saveState();
+  state.successMessage = `Panadería de ${order.rest} marcada como hecha.`;
+  render();
+}
+function switchToPanaderiaTab(tab){
+  state.panaderiaSubTab = tab;
+  state.panaderiaFilter = '';
+  render();
+}
+function setPanaderiaFilter(r){ state.panaderiaFilter = r; render(); }
 function renderPanaderia(){
   if(!checkModuleAuth('PANADERIA')){ renderModuleLogin('PANADERIA','Módulo PANADERÍA'); return; }
+  const rests = Object.keys(RESTAURANTS_CONFIG);
+  const pend = state.orders.filter(o => isPanaderiaPendingOrder(o));
+  const listos = state.orders.filter(o => isRecentOrder(o) && (o.items||[]).some(it => isPanaderiaItem(it) && it.panaderiaListo));
+  const filteredPendOrders = sortNewestFirst(pend.filter(o => !state.panaderiaFilter || o.rest === state.panaderiaFilter));
+  const panPendByDate = [];
+  {
+    const map = {};
+    filteredPendOrders.forEach(o => {
+      const d = o.deliveryDate || '';
+      if(!map[d]) map[d] = [];
+      map[d].push(o);
+    });
+    Object.keys(map).sort((a,b)=> (b||'').localeCompare(a||'')).forEach(d => {
+      panPendByDate.push({ date: d, orders: map[d].slice().sort((a,b)=> (a.rest||'').localeCompare(b.rest||'')) });
+    });
+  }
+  const histSource = listos;
+  const panHistCount = histSource.length;
+  let filteredDispOrders = sortNewestFirst(state.panaderiaFilter
+    ? histSource.filter(o => o.rest === state.panaderiaFilter)
+    : histSource);
+  if(state.panaderiaSubTab === 'HISTORIAL'){
+    filteredDispOrders = filteredDispOrders.filter(o => matchesDateFilter(o.deliveryDate, state.panaderiaHistFrom, state.panaderiaHistTo) && orderHasProduct(o, state.panaderiaProdSearch));
+  }
+  let panHistGroups = [];
+  if(state.panaderiaSubTab === 'HISTORIAL'){
+    const map = {};
+    filteredDispOrders.forEach(o => {
+      const key = `${o.rest}|${o.deliveryDate||''}`;
+      if(!map[key]) map[key] = { rest: o.rest, deliveryDate: o.deliveryDate||'', items: {} };
+      (o.items||[]).forEach(it => {
+        if(!isPanaderiaItem(it) || !it.panaderiaListo) return;
+        if(!itemMatchesProduct(it, state.panaderiaProdSearch)) return;
+        const qty = Number(it.dispatchedQty != null ? it.dispatchedQty : it.qty) || 0;
+        if(qty <= 0 && !it.qty) return;
+        const q = qty > 0 ? qty : Number(it.qty)||0;
+        if(q <= 0) return;
+        if(!map[key].items[it.name]) map[key].items[it.name] = { name: it.name, qty: 0 };
+        map[key].items[it.name].qty += q;
+      });
+    });
+    panHistGroups = Object.values(map).map(g => ({...g, lines: Object.values(g.items)})).filter(g => g.lines.length);
+    panHistGroups.sort((a,b) => (b.deliveryDate||'').localeCompare(a.deliveryDate||'') || (a.rest||'').localeCompare(b.rest||''));
+  }
+  function restPanCount(r, listType){
+    if(listType === 'PENDIENTES') return pend.filter(o => (!r || o.rest === r)).length;
+    return histSource.filter(o => (!r || o.rest === r)).length;
+  }
   app.innerHTML=`
   <div class="nav-header">
     <button class="btn-back" onclick="navigateTo('HOME')">← Salir</button>
-    <h2>Módulo PANADERÍA</h2>
-    <div></div>
+    <h2>Módulo PANADERIA</h2>
   </div>
-  <div class="order-card" style="text-align:center;padding:2rem 1.25rem">
-    <div style="font-size:2rem;margin-bottom:0.75rem">🥖</div>
-    <p style="font-size:0.9rem;color:var(--text-muted);margin:0">Módulo listo. Cuando definamos el flujo de panadería (qué ve, marcar hecho, etc.) lo completamos acá.</p>
-  </div>`;
+  ${state.successMessage?`<div class="success-message"><div><strong>✓ ${state.successMessage}</strong></div><button class="success-close" onclick="state.successMessage='';render()">×</button></div>`:''}
+  <div class="module-tabs">
+    <button class="module-tab-btn ${state.panaderiaSubTab==='PENDIENTES'?'active':''}" onclick="switchToPanaderiaTab('PENDIENTES')">Pedidos</button>
+    <button class="module-tab-btn ${state.panaderiaSubTab==='HISTORIAL'?'active':''}" onclick="switchToPanaderiaTab('HISTORIAL')">Historial (${panHistCount})</button>
+  </div>
+  ${state.panaderiaSubTab === 'HISTORIAL' ? `<p style="font-size:0.72rem;color:var(--text-muted);margin:0 0 0.55rem">Solo se muestran los últimos ${HISTORIAL_DAYS} días.</p>` : ''}
+  ${state.panaderiaSubTab === 'PENDIENTES' ? `
+  <div class="section-title">Filtro (opcional)</div>
+  <div class="restaurant-filters">
+    <button class="restaurant-filter-btn ${!state.panaderiaFilter?'active':''}" onclick="setPanaderiaFilter('')">TODOS <span class="filter-count">(${pend.length})</span></button>
+    ${rests.map(r=>{
+      const count = restPanCount(r, 'PENDIENTES');
+      let btnClass = '';
+      if(state.panaderiaFilter === r) btnClass = 'active';
+      else if(count > 0) btnClass = 'has-pending';
+      return `<button class="restaurant-filter-btn ${btnClass}" onclick="setPanaderiaFilter('${r}')">${r} <span class="filter-count">(${count})</span></button>`;
+    }).join('')}
+  </div>` : `
+  <div class="order-card filter-bar" style="margin-bottom:0.75rem;padding:0.75rem">
+    <div class="section-title" style="margin-bottom:0.5rem">Filtro de búsqueda</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:flex-end">
+      <div class="form-group" style="margin:0">
+        <label style="font-size:0.7rem">Restaurante</label>
+        <select onchange="setPanaderiaFilter(this.value)" style="padding:0.35rem;border:1px solid var(--border);border-radius:4px;min-width:140px">
+          <option value="" ${!state.panaderiaFilter?'selected':''}>TODOS</option>
+          ${rests.map(r=>`<option value="${r}" ${state.panaderiaFilter===r?'selected':''}>${r}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group" style="margin:0"><label style="font-size:0.7rem">Desde</label><input type="date" max="2099-12-31" value="${state.panaderiaHistFrom||''}" onchange="state.panaderiaHistFrom=this.value;render()" style="padding:0.35rem"></div>
+      <div class="form-group" style="margin:0"><label style="font-size:0.7rem">Hasta</label><input type="date" max="2099-12-31" value="${state.panaderiaHistTo||''}" onchange="state.panaderiaHistTo=this.value;render()" style="padding:0.35rem"></div>
+      <div class="form-group" style="margin:0;min-width:160px;max-width:240px"><label style="font-size:0.7rem">Producto</label><div style="display:flex;gap:0.25rem;align-items:center"><input type="text" placeholder="ej. flauta" value="${(state.panaderiaProdSearch||'').replace(/"/g,'&quot;')}" oninput="state.panaderiaProdSearch=this.value;render()" style="padding:0.35rem;width:100%;border:1px solid var(--border);border-radius:4px"><button type="button" class="btn-back" style="padding:0.25rem 0.45rem" onclick="state.panaderiaProdSearch='';render()">×</button></div></div>
+      <button type="button" class="btn-back" onclick="state.panaderiaFilter='';state.panaderiaProdSearch='';state.panaderiaHistFrom='';state.panaderiaHistTo='';render()">Limpiar</button>
+    </div>
+  </div>`}
+  ${state.panaderiaSubTab === 'PENDIENTES' ? `
+    <div class="section-title">PEDIDOS POR FECHA (${filteredPendOrders.length})</div>
+    ${panPendByDate.length===0?`<div class="order-card"><p style="color:var(--text-muted);font-size:0.8rem">No hay pedidos de panadería pendientes.</p></div>`:''}
+    ${panPendByDate.map(g=>`
+      <div style="margin:0.9rem 0 0.45rem;padding:0.45rem 0.7rem;background:#1c1917;color:#fff;border-radius:6px;font-size:0.92rem;font-weight:800;letter-spacing:0.04em">PARA: ${fmtD(g.date)||'Sin fecha'}</div>
+      ${g.orders.map(o=>`
+      <div class="order-card">
+        <div class="order-header">
+          <div class="order-top-line"><div class="order-rest">${o.rest}</div></div>
+          ${o.planta?`<div class="order-for-date">${o.planta}</div>`:''}
+          <div class="order-received">Recibido: ${fmtDT(o.receivedDate)||'Reciente'}</div>
+        </div>
+        <table class="table-module">
+          <thead><tr><th style="width:70%">PEDIDO</th><th style="width:30%">CANTIDAD</th></tr></thead>
+          <tbody>
+            ${(o.items||[]).filter(it=>isPanaderiaRelevant(it)).map(item=>`
+              <tr>
+                <td><span class="prod-name">${item.name}</span></td>
+                <td><span class="qty-badge">${item.qty}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <button type="button" onclick="markPanaderiaDone('${o.id}')" style="margin-top:0.5rem;padding:0.32rem 0.7rem;border:none;border-radius:5px;background:#4d7c0f;color:#fff;font-size:0.72rem;font-weight:700;cursor:pointer;letter-spacing:0.04em">✓ Marcar como hechos</button>
+      </div>`).join('')}
+    `).join('')}
+  ` : `
+    ${panHistGroups.length===0?`<div class="order-card"><p style="color:var(--text-muted);font-size:0.8rem">No hay historial para este filtro.</p></div>`:''}
+    ${panHistGroups.map(g=>`
+      <div class="order-card" style="border-left:4px solid var(--success)">
+        <div class="order-header">
+          <div class="order-top-line"><div class="order-rest">${g.rest}</div></div>
+          <div class="order-for-date">Para: ${fmtD(g.deliveryDate)}</div>
+          <div class="order-received">Hechos / Completados</div>
+        </div>
+        <table class="table-module">
+          <thead><tr><th>Producto</th><th class="qty-col">Cantidad</th></tr></thead>
+          <tbody>
+            ${g.lines.map(item=>`
+              <tr>
+                <td><span class="prod-name">${item.name}</span></td>
+                <td class="qty-col"><span class="qty-badge">${item.qty}</span></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>`).join('')}
+  `}`;
 }
 
 // ── TRANSPORTE ────────────────────────────────────────
@@ -1154,8 +1326,9 @@ function renderGroupCategoryBlocks(group, gIdx){
         const defDesp = partQty;
         const isZero = !poz && Number(defDesp) === 0;
         const safeName = String(name).replace(/'/g,"\\'");
+        const retiroHel = isRetiroHeladeria(name);
         body += `<tr id="grow-${gIdx}-${cat}-${idSuffix}">
-        <td><span class="prod-name">${name}</span>${multi?`<div style="font-size:0.58rem;color:var(--text-muted);font-weight:700">Parte ${pIdx+1}/${parts.length}</div>`:''}${(!poz && !isOtros && totalQty>=2 && pIdx===0)?`<button type="button" class="btn-dividir" onclick="dividirLinea(${gIdx},'${cat}','${safeName}',${totalQty})">✂ Dividir lote</button>`:''}${(!poz && !isOtros && multi && pIdx===0)?`<button type="button" class="btn-dividir" style="color:#92400e;border-color:#fde68a;background:#fffbeb" onclick="deshacerUltimaDivision(${gIdx},'${cat}','${safeName}',${totalQty})">↩ Quitar última división</button><button type="button" class="btn-dividir" style="color:#b91c1c;border-color:#fecaca;background:#fef2f2" onclick="deshacerDivision(${gIdx},'${cat}','${safeName}',${totalQty})">Unir todo</button>`:''}</td>
+        <td><div class="prod-name">${name}</div>${retiroHel?`<div style="font-size:0.62rem;font-weight:700;color:#9a3412;background:#ffedd5;border:1px solid #fdba74;border-radius:4px;padding:0.18rem 0.4rem;margin-top:0.45rem;display:inline-block">⚠ Retirar en HELADERÍA</div>`:''}${multi?`<div style="font-size:0.58rem;color:var(--text-muted);font-weight:700">Parte ${pIdx+1}/${parts.length}</div>`:''}${(!poz && !isOtros && totalQty>=2 && pIdx===0)?`<button type="button" class="btn-dividir" onclick="dividirLinea(${gIdx},'${cat}','${safeName}',${totalQty})">✂ Dividir lote</button>`:''}${(!poz && !isOtros && multi && pIdx===0)?`<button type="button" class="btn-dividir" style="color:#92400e;border-color:#fde68a;background:#fffbeb" onclick="deshacerUltimaDivision(${gIdx},'${cat}','${safeName}',${totalQty})">↩ Quitar última división</button><button type="button" class="btn-dividir" style="color:#b91c1c;border-color:#fecaca;background:#fef2f2" onclick="deshacerDivision(${gIdx},'${cat}','${safeName}',${totalQty})">Unir todo</button>`:''}</td>
         <td><span class="qty-badge">${partQty}</span></td>
         <td>
           ${poz ? `<span class="qty-badge" style="background:#e2e8f0">${partQty}</span>
@@ -1646,12 +1819,20 @@ function renderHeladeria(){
   // Historial heladería: despachados con helados listos O poz/amazonico (solo últimos 7 días)
   const listos = state.orders.filter(o => isRecentOrder(o) && o.items.some(it => it.area === 'HELADOS' && it.heladeriaListo));
 
-  if(state.heladeriaSubTab === 'PENDIENTES' && (!state.heladeriaFilter || !rests.includes(state.heladeriaFilter))){
-    const firstWithPoz = rests.find(r => pend.some(o => o.rest === r));
-    state.heladeriaFilter = firstWithPoz || rests[0];
+  const filteredPendOrders = sortNewestFirst(pend.filter(o => !state.heladeriaFilter || o.rest === state.heladeriaFilter));
+  const helPendByDate = [];
+  {
+    const map = {};
+    filteredPendOrders.forEach(o => {
+      const d = o.deliveryDate || '';
+      if(!map[d]) map[d] = [];
+      map[d].push(o);
+    });
+    Object.keys(map).sort((a,b)=> (b||'').localeCompare(a||'')).forEach(d => {
+      const orders = map[d].slice().sort((a,b)=> (a.rest||'').localeCompare(b.rest||''));
+      helPendByDate.push({ date: d, orders });
+    });
   }
-
-  const filteredPendOrders = sortNewestFirst(pend.filter(o => o.rest === state.heladeriaFilter));
   const histSource = listos.length ? listos : disp;
   const helHistCount = histSource.filter(o => o.items.some(it => it.area === 'HELADOS' && (it.heladeriaListo || isPozzetti(it) || isHeladeriaMadeTupper(it) || o.rest==='AMAZONICO'))).length;
   let filteredDispOrders = sortNewestFirst(state.heladeriaFilter
@@ -1714,14 +1895,14 @@ function renderHeladeria(){
   </div>
   ${state.heladeriaSubTab === 'HISTORIAL' ? `<p style="font-size:0.72rem;color:var(--text-muted);margin:0 0 0.55rem">Solo se muestran los últimos ${HISTORIAL_DAYS} días.</p>` : ''}
   ${state.heladeriaSubTab === 'PENDIENTES' ? `
-  <div class="section-title">Filtro de búsqueda</div>
+  <div class="section-title">Filtro (opcional)</div>
   <div class="restaurant-filters">
+    <button class="restaurant-filter-btn ${!state.heladeriaFilter?'active':''}" onclick="setHeladeriaFilter('')">TODOS <span class="filter-count">(${pend.length})</span></button>
     ${rests.map(r=>{
       const count = restHelCount(r, 'PENDIENTES');
-      const hasPoz = count > 0;
       let btnClass = '';
       if(state.heladeriaFilter === r) btnClass = 'active';
-      else if(hasPoz) btnClass = 'has-pending';
+      else if(count > 0) btnClass = 'has-pending';
       return `<button class="restaurant-filter-btn ${btnClass}" onclick="setHeladeriaFilter('${r}')">${r} <span class="filter-count">(${count})</span></button>`;
     }).join('')}
   </div>` : `
@@ -1743,16 +1924,17 @@ function renderHeladeria(){
   </div>`}
 
   ${state.heladeriaSubTab === 'PENDIENTES' ? `
-    <div class="section-title">PEDIDOS (${filteredPendOrders.length})</div>
-    ${filteredPendOrders.length===0?`<div class="order-card"><p style="color:var(--text-muted);font-size:0.8rem">No hay helados para este restaurante.</p></div>`:''}
-    ${filteredPendOrders.map(o=>`
+    <div class="section-title">PEDIDOS POR FECHA (${filteredPendOrders.length})</div>
+    ${helPendByDate.length===0?`<div class="order-card"><p style="color:var(--text-muted);font-size:0.8rem">No hay helados pendientes.</p></div>`:''}
+    ${helPendByDate.map(g=>`
+      <div style="margin:0.9rem 0 0.45rem;padding:0.45rem 0.7rem;background:#1c1917;color:#fff;border-radius:6px;font-size:0.92rem;font-weight:800;letter-spacing:0.04em">PARA: ${fmtD(g.date)||'Sin fecha'}</div>
+      ${g.orders.map(o=>`
       <div class="order-card">
         <div class="order-header">
           <div class="order-top-line">
             <div class="order-rest">${o.rest}</div>
-
           </div>
-          <div class="order-for-date">Para: ${fmtD(o.deliveryDate)}${o.planta? ' · '+o.planta : ''}</div>
+          ${o.planta?`<div class="order-for-date">${o.planta}</div>`:''}
           <div class="order-received">Recibido: ${fmtDT(o.receivedDate)||'Reciente'}</div>
         </div>
         <table class="table-module">
@@ -1766,8 +1948,9 @@ function renderHeladeria(){
             `).join('')}
           </tbody>
         </table>
-        <button class="btn-confirm" style="margin-top:0.75rem" onclick="markHeladeriaDone('${o.id}')">✓ Marcar como hechos</button>
+        <button type="button" onclick="markHeladeriaDone('${o.id}')" style="margin-top:0.5rem;padding:0.32rem 0.7rem;border:none;border-radius:5px;background:#4d7c0f;color:#fff;font-size:0.72rem;font-weight:700;cursor:pointer;letter-spacing:0.04em">✓ Marcar como hechos</button>
       </div>`).join('')}
+    `).join('')}
   ` : `
     ${helHistGroups.length===0?`<div class="order-card"><p style="color:var(--text-muted);font-size:0.8rem">No hay historial para este filtro.</p></div>`:''}
     ${helHistGroups.map(g=>`
@@ -1780,12 +1963,12 @@ function renderHeladeria(){
           <div class="order-received">Hechos / Completados</div>
         </div>
         <table class="table-module">
-          <thead><tr><th style="width:50%">Producto</th><th style="width:25%">Cantidad</th><th style="width:25%">Lote</th></tr></thead>
+          <thead><tr><th>Producto</th><th class="qty-col">Cantidad</th><th style="width:6.5rem">Lote</th></tr></thead>
           <tbody>
             ${g.lines.map(item=>`
               <tr>
                 <td><span class="prod-name">${item.name}</span></td>
-                <td><span class="qty-badge">${item.qty}</span></td>
+                <td class="qty-col"><span class="qty-badge">${item.qty}</span></td>
                 <td style="font-size:0.75rem;color:#0369a1">${fmtD(item.lote || g.deliveryDate)}</td>
               </tr>
             `).join('')}
@@ -1799,12 +1982,7 @@ function switchToHeladeriaTab(tab){
   state.heladeriaSubTab = tab;
   const rests = Object.keys(RESTAURANTS_CONFIG).filter(isHeladeriaRest);
   const pend = state.orders.filter(o => o.status === 'Pendiente');
-  if(tab === 'PENDIENTES'){
-    const firstWithPoz = rests.find(r => pend.some(o => o.rest === r && o.items.some(it => isHeladeriaRelevant(o.rest, it))));
-    state.heladeriaFilter = firstWithPoz || rests[0];
-  } else {
-    state.heladeriaFilter = '';
-  }
+  state.heladeriaFilter = '';
   render();
 }
 
