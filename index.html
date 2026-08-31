@@ -2898,9 +2898,8 @@ function renderAPPCC(){
         <input type="date" max="2099-12-31" value="${state.archiveUntil||''}" onchange="state.archiveUntil=this.value" style="padding:0.4rem;min-width:150px;border:1px solid var(--text)">
       </div>
       <button class="btn" onclick="exportCSVRange()">⬇ Descargar CSV</button>
-      ${(state.pendingArchiveIds&&state.pendingArchiveIds.length)?`<button class="btn" style="background:#b91c1c" onclick="confirmArchiveAfterDownload()">Confirmar archivo (borrar de la app)</button>`:''}
     </div>
-    ${(state.pendingArchiveIds&&state.pendingArchiveIds.length)?`<p style="font-size:0.72rem;color:#92400e;background:#fef3c7;padding:0.45rem 0.6rem;border-radius:6px;margin:0 0 0.75rem">CSV generado hasta ${fmtD(state.pendingArchiveUntil||'')}. Si lo <strong>guardaste</strong>, tocá «Confirmar archivo». Si cancelaste la descarga, no toques ese botón.</p>`:''}
+    
     <div class="table-scroll" style="max-height:70vh;overflow:auto">
       <table class="table-module" style="min-width:960px">
         <thead>
@@ -3101,20 +3100,7 @@ function exportCSVRange(){
     return;
   }
   downloadCSVFile(csv, 'APPCC_hasta_'+until+'.csv');
-
-  // NO se borra aún: el navegador no avisa si cancelás "Guardar como"
-  state.pendingArchiveIds = matched.map(o => o.id);
-  state.pendingArchiveUntil = until;
-  state.pendingArchiveLines = lines;
-  state.successMessage = 'CSV generado ('+lines+' líneas). Si lo guardaste, tocá «Confirmar archivo».';
-  render();
-}
-function confirmArchiveAfterDownload(){
-  const ids = state.pendingArchiveIds || [];
-  if(!ids.length) return;
-  const until = state.pendingArchiveUntil || '';
-  const idSet = new Set(ids);
-  // Marca como archivado en PANEL (ya no se ve ahí). Sigue en transporte/heladería/restaurantes 7 días.
+  const idSet = new Set(matched.map(o => o.id));
   let marked = 0;
   state.orders.forEach(o => {
     if(idSet.has(o.id)){
@@ -3122,14 +3108,13 @@ function confirmArchiveAfterDownload(){
       marked++;
     }
   });
-  // Fuera de 7 días: se borra del todo
   const purged = purgeOlderThanHistory();
   state.pendingArchiveIds = null;
   state.pendingArchiveUntil = '';
   state.pendingArchiveLines = 0;
   saveState();
-  let msg = 'Archivado hasta '+fmtD(until)+': '+marked+' pedido(s) ya no se ven en el panel de descargas.';
-  if(purged) msg += ' '+purged+' más antiguos de '+HISTORIAL_DAYS+' días eliminados de la app.';
+  let msg = 'CSV descargado ('+lines+' líneas). '+marked+' pedido(s) ya no se ven en el panel.';
+  if(purged) msg += ' '+purged+' de más de '+HISTORIAL_DAYS+' días eliminados de la app.';
   state.successMessage = msg;
   render();
 }
