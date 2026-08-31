@@ -2041,6 +2041,7 @@ function renderRestaurantes(){
       <button class="btn-back" onclick="navigateTo('HOME')">← Salir</button>
       <h2>Módulo Restaurantes</h2>
     </div>
+    <p style="text-align:center;font-size:0.72rem;color:#f8fafc;background:#0f172a;margin:0 0 0.85rem;padding:0.55rem 0.7rem;line-height:1.4">Al terminar el pedido, cerrá la pestaña del navegador para no saturar el sistema.</p>
     <div class="order-card" style="max-width:400px;margin:0 auto">
       <h3 style="margin-bottom:0.75rem;text-align:center;font-size:0.9rem;text-transform:uppercase">Acceso Restaurantes</h3>
       <label>Selecciona Restaurante</label>
@@ -2093,6 +2094,7 @@ function renderRestaurantes(){
     <button class="btn-back" onclick="navigateTo('HOME')">← Salir</button>
     <div><strong>${state.selRest}</strong></div>
   </div>
+  <p style="text-align:center;font-size:0.72rem;color:#f8fafc;background:#0f172a;margin:0 0 0.65rem;padding:0.55rem 0.7rem;border-radius:6px;line-height:1.4">Al terminar el pedido, cerrá la pestaña del navegador para no saturar el sistema.</p>
   ${state.successMessage?`<div class="success-message"><div><strong>✓ Pedido realizado con éxito</strong><br>${state.successMessage}</div><button class="success-close" onclick="state.successMessage='';render()">×</button></div>`:''}
 
   <div class="module-tabs">
@@ -2897,9 +2899,9 @@ function renderAPPCC(){
     <div style="display:flex;flex-wrap:wrap;gap:0.6rem;align-items:flex-end;margin-bottom:0.85rem">
       <div class="form-group" style="margin:0">
         <label style="font-size:0.7rem">Archivar hasta esta fecha</label>
-        <input type="date" max="2099-12-31" value="${state.archiveUntil||''}" onchange="state.archiveUntil=this.value" style="padding:0.4rem;min-width:150px;border:1px solid var(--text)">
+        <input type="date" max="2099-12-31" value="${state.archiveUntil||''}" onchange="state.archiveUntil=this.value;render()" style="padding:0.4rem;min-width:150px;border:1px solid var(--text)">
       </div>
-      <button class="btn" onclick="exportCSVRange()">⬇ Descargar CSV</button>
+      <button class="btn" onclick="exportCSVRange()" ${state.archiveUntil?'':'disabled'} style="${state.archiveUntil?'':'opacity:0.45;cursor:not-allowed'}">⬇ Descargar CSV</button>
     </div>
     
     <div class="table-scroll" style="max-height:70vh;overflow:auto">
@@ -3082,10 +3084,7 @@ function exportOtrosCSV(){
 
 function exportCSVRange(){
   const until = state.archiveUntil || '';
-  if(!until){
-    alert('Elegí la fecha «Archivar hasta esta fecha» (al lado del botón).\n\nEjemplo: si hoy es 15/08, poné 13/08 para archivar solo hasta el 13 y dejar el 14 y 15 en la app.');
-    return;
-  }
+  if(!until) return;
   // Independiente del filtro de búsqueda: despachado hasta esa fecha y aún no archivado
   const matched = state.orders.filter(o => o.status==='Despachado' && !o.archivedAppcc && o.deliveryDate && o.deliveryDate <= until);
   if(matched.length === 0){
