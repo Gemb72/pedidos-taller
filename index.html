@@ -689,6 +689,7 @@ function cutoffDateISO(days){
   return y+'-'+m+'-'+day;
 }
 function isRecentOrder(o, days){
+  if(!o || o.status === 'Anulado') return false;
   if(days == null) days = HISTORIAL_DAYS;
   const cutoff = cutoffDateISO(days);
   const d = o.deliveryDate || ((o.receivedDate||'').split(' ')[0]) || '';
@@ -2079,7 +2080,7 @@ function renderRestaurantes(){
   const cat = isOtrosTab ? (cfg.catalog.OTROS||[]) : (cfg.catalog[state.activeTab]||[]);
   const areaSort = tabToItemArea(state.activeTab);
   const items = searching ? [] : [...cat].sort((a,b)=>nombreCorto(a,areaSort).localeCompare(nombreCorto(b,areaSort),'es',{sensitivity:'base'}));
-  let myOrders = sortNewestFirst(state.orders.filter(o => o.rest === state.selRest && (o.status==='Pendiente' || isRecentOrder(o))));
+  let myOrders = sortNewestFirst(state.orders.filter(o => o.rest === state.selRest && o.status !== 'Anulado' && (o.status==='Pendiente' || isRecentOrder(o))));
   if(state.restSubTab === 'HISTORIAL'){
     myOrders = myOrders.filter(o => matchesDateFilter(o.deliveryDate, state.restHistFrom, state.restHistTo) && orderHasProduct(o, state.restProdSearch));
   }
@@ -2353,6 +2354,7 @@ function cancelRestOrder(orderId){
   if(!confirm('¿Anular este pedido?\nPara: ' + fmtD(o.deliveryDate) + '\nDejará de verse en transporte.')) return;
   o.status = 'Anulado';
   o.cancelledDate = new Date().toISOString();
+  o.modifiedDate = o.cancelledDate;
   if(state.editingOrderId === orderId){
     state.editingOrderId = '';
     state.cart = [];
