@@ -574,7 +574,7 @@ function saveState(){
 }
 
 async function pushOrdersToCloud(){
-  if(!sb || !syncReady) return;
+  if(!sb || !syncReady) return false;
   try{
     const { data } = await sb.from('registros_pedidos').select('orders').eq('id', 1).maybeSingle();
     const remote = (data && Array.isArray(data.orders)) ? data.orders : [];
@@ -588,8 +588,9 @@ async function pushOrdersToCloud(){
       orders: merged,
       updated_at: new Date().toISOString()
     });
-    if(error) console.warn('Sync push:', error.message);
-  }catch(e){ console.warn('Sync push fail', e); }
+    if(error){ console.warn('Sync push:', error.message); return false; }
+    return true;
+  }catch(e){ console.warn('Sync push fail', e); return false; }
 }
 
 async function pullOrdersFromCloud(){
@@ -925,6 +926,8 @@ function render(){
   else if(state.view==='APPCC')renderAPPCC();
   else if(state.view==='INVENTARIO')renderInventario();
   restoreRestScroll();
+  const badge=document.getElementById('sync-badge');
+  if(badge) badge.style.display = state.view==='APPCC' ? 'block' : 'none';
 }
 
 // ── HOME ──────────────────────────────────────────────
@@ -2030,7 +2033,9 @@ function switchToHeladeriaTab(tab){
 
 function setHeladeriaFilter(r){state.heladeriaFilter=r;render();}
 
-// ── RESTAURANTES ──────────────────────────────────────
+function hintCierreTab(){
+  return `<p style="text-align:center;font-size:0.62rem;color:#e2e8f0;background:#0f172a;margin:0 0 0.55rem;padding:0.35rem 0.55rem;line-height:1.35">Al terminar, cierra la pestaña del navegador para no saturar el sistema.</p>`;
+}
 function renderRestaurantes(){
   const rests=Object.keys(RESTAURANTS_CONFIG);
   if(state.selRest && !rests.includes(state.selRest)) state.selRest='';
@@ -2039,9 +2044,9 @@ function renderRestaurantes(){
     app.innerHTML=`
     <div class="nav-header">
       <button class="btn-back" onclick="navigateTo('HOME')">← Salir</button>
-      <h2>Módulo Restaurantes</h2>
+      <h2>Pedidos</h2>
     </div>
-    <p style="text-align:center;font-size:0.72rem;color:#f8fafc;background:#0f172a;margin:0 0 0.85rem;padding:0.55rem 0.7rem;line-height:1.4">Al terminar el pedido, cerrá la pestaña del navegador para no saturar el sistema.</p>
+    ${hintCierreTab()}
     <div class="order-card" style="max-width:400px;margin:0 auto">
       <h3 style="margin-bottom:0.75rem;text-align:center;font-size:0.9rem;text-transform:uppercase">Acceso Restaurantes</h3>
       <label>Selecciona Restaurante</label>
@@ -2052,7 +2057,7 @@ function renderRestaurantes(){
         <label>PIN de Acceso</label>
         <input type="password" id="login-pin" placeholder="Ingrese PIN" onkeydown="if(event.key==='Enter')loginRest()">
       </div>
-      <button class="btn" style="width:100%" onclick="loginRest()">Acceder</button>
+      <button class="btn" style="width:100%" onclick="loginRest()">Entrar</button>
     </div>`;return;
   }
 
@@ -2094,7 +2099,6 @@ function renderRestaurantes(){
     <button class="btn-back" onclick="navigateTo('HOME')">← Salir</button>
     <div><strong>${state.selRest}</strong></div>
   </div>
-  <p style="text-align:center;font-size:0.72rem;color:#f8fafc;background:#0f172a;margin:0 0 0.65rem;padding:0.55rem 0.7rem;border-radius:6px;line-height:1.4">Al terminar el pedido, cerrá la pestaña del navegador para no saturar el sistema.</p>
   ${state.successMessage?`<div class="success-message"><div><strong>✓ Pedido realizado con éxito</strong><br>${state.successMessage}</div><button class="success-close" onclick="state.successMessage='';render()">×</button></div>`:''}
 
   <div class="module-tabs">
@@ -2160,12 +2164,13 @@ function renderRestaurantes(){
   ${state.restOrderPanel==='PRECHECK' ? `
     <div class="order-card">
             <div class="section-title">${state.editingOrderId?'Modificar pedido':'Resumen del pedido'}</div>
-      <div style="display:flex;flex-wrap:nowrap;gap:0.45rem;align-items:flex-end;margin-bottom:0.75rem">
+      <div style="display:flex;flex-wrap:wrap;gap:0.4rem;align-items:flex-end;margin-bottom:0.75rem">
         <div class="form-group" style="margin:0;flex:0 0 auto">
           <label>Fecha de entrega</label>
-          <input type="date" max="2099-12-31" value="${state.deliveryDate}" onchange="state.deliveryDate=this.value;persistRestDraft()" style="width:150px;max-width:150px">
+          <input type="date" max="2099-12-31" value="${state.deliveryDate}" onchange="state.deliveryDate=this.value;persistRestDraft()" style="width:140px;max-width:46vw">
         </div>
-        ${state.cart.length>0?`<button class="btn-confirm" style="width:auto;margin:0 0 0 0;min-height:34px;height:34px;padding:0.3rem 0.75rem;white-space:nowrap;flex:0 0 auto" onclick="submitRestOrder()">${state.editingOrderId?'Guardar cambios':'Enviar pedido'}</button>`:''}
+        ${state.cart.length>0?`<button class="btn-confirm" style="width:auto;margin:0;min-height:36px;height:36px;padding:0.3rem 0.7rem;white-space:nowrap" onclick="submitRestOrder()">${state.editingOrderId?'Guardar cambios':'Enviar pedido'}</button>`:''}
+        ${state.cart.length&&!state.editingOrderId?`<button type="button" class="btn-back" style="margin:0;min-height:36px;height:36px;padding:0.3rem 0.7rem;border-color:#b91c1c;color:#b91c1c;white-space:nowrap" onclick="clearRestPedido()">Borrar pedido</button>`:''}
       </div>
       ${state.selRest==='METROPOLIS' ? `<div class="form-group">
         <label>Planta</label>
@@ -2338,6 +2343,18 @@ function setCartQtyFromTab(name, raw){
 function setCartQtyOtros(name, raw){
   setCartQty(name, 'OTROS', raw);
 }
+function clearRestPedido(){
+  if(!(state.cart||[]).length) return;
+  if(!confirm('¿Borrar todo el pedido?')) return;
+  state.cart=[];
+  state.deliveryDate='';
+  state.metropolisPlanta='';
+  state.editingOrderId='';
+  try{ clearRestDraft(state.selRest); }catch(e){}
+  try{ persistRestDraft(); }catch(e){}
+  state.restOrderPanel='CATALOGO';
+  render();
+}
 function removeFromCart(name, area){
   saveRestScroll();
   if(area != null && area !== '') state.cart = state.cart.filter(c => !(c.name === name && c.area === area));
@@ -2392,7 +2409,7 @@ function editRestOrder(orderId){
   state.successMessage = '';
   render();
 }
-function submitRestOrder(){
+async function submitRestOrder(){
   if(!state.deliveryDate){const d=document.querySelector('input[type="date"]');if(d){d.style.borderColor='var(--danger)';d.focus();}return;}
   if(!state.cart.length){
     alert('El pedido no tiene productos.');
@@ -2400,6 +2417,10 @@ function submitRestOrder(){
   }
   if(state.selRest==='METROPOLIS' && !state.metropolisPlanta){
     alert('Elegí la planta.');
+    return;
+  }
+  if(typeof navigator!=='undefined' && navigator.onLine===false){
+    alert('No hay internet (WiFi o datos). El pedido NO se envió a Central.\nConectate y volvé a tocar Enviar.');
     return;
   }
   const now=new Date();
@@ -2425,7 +2446,13 @@ function submitRestOrder(){
     clearRestDraft(state.selRest);saveState();
     state.authRest=true;
     state.restSubTab='HISTORIAL';
-    state.successMessage=`Pedido modificado. ID: ${o.id}`;
+    const okEdit = await pushOrdersToCloud();
+    if(!okEdit){
+      alert('El cambio se guardó en este teléfono pero no llegó a Central.\nRevisá internet. No hace falta armar el pedido de nuevo.');
+      state.successMessage='';
+    }else{
+      state.successMessage=`Pedido modificado. ID: ${o.id}. Ya puedes cerrar la pestaña.`;
+    }
     render();
     return;
   }
@@ -2439,7 +2466,13 @@ function submitRestOrder(){
   };
   state.orders.unshift(newOrder);state.cart=[];state.deliveryDate='';state.metropolisPlanta='';state.restOrderPanel='CATALOGO';clearRestDraft(state.selRest);saveState();
   state.authRest=true;
-  state.successMessage=`ID: ${newOrder.id}`;
+  const ok = await pushOrdersToCloud();
+  if(!ok){
+    alert('No se pudo enviar a Central (sin red o falló la nube).\nEl pedido quedó en ESTE teléfono. No lo armes de nuevo: cuando haya internet se intentará subir. Si podés, no apagues el celular todavía.');
+    state.successMessage='';
+  }else{
+    state.successMessage=`Pedido enviado. ID: ${newOrder.id}. Ya puedes cerrar la pestaña.`;
+  }
   render();
 }
 
